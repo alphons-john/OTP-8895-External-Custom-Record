@@ -2,6 +2,27 @@
  * @NApiVersion 2.1
  * @NScriptType Suitelet
  */
+/**********************************************************************************************
+* Client Name
+*
+*
+*
+${OTP-8895}:{Monthly Over Due Reminder for Customer}
+*
+*
+**************************************************************************************************
+*
+*Author:Jobin and Jismi IT Services
+*
+*Date Created:30-may-2025
+*
+*Description:This Map/Reduce script will automate monthly overdue invoice notifications in NetSuite. It will retrieve overdue invoices, group them by customer, and attach them as a CSV file in an email. The sender will be the Sales Rep or a static NetSuite Admin if no Sales Rep is assigned
+*
+** REVISION HISTORY
+ *
+* @version 1.0 30-May-2025 : Created the initial build by JJ0403
+*/
+
 define(['N/record', 'N/ui/serverWidget', 'N/search', 'N/url', 'N/email'],
     /**
  * @param{email} email
