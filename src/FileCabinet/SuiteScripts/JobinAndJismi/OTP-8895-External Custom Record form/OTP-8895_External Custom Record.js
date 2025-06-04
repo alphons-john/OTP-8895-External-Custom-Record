@@ -3,7 +3,7 @@
  * @NScriptType Suitelet
  */
 /**********************************************************************************************
-* Client Name
+* 
 *
 *
 *
@@ -16,7 +16,7 @@ ${OTP-8895}:{External Custom Record form and actions}
 *
 *Date Created:30-may-2025
 *
-*Description:This Map/Reduce script will automate monthly overdue invoice notifications in NetSuite. It will retrieve overdue invoices, group them by customer, and attach them as a CSV file in an email. The sender will be the Sales Rep or a static NetSuite Admin if no Sales Rep is assigned
+*Description:This script is designed to generate records for a custom record type in NetSuite, incorporating fields such as Customer Name, Email, *Customer Reference, Subject, and Message. The Customer Reference field automatically links to the corresponding customer record when an existing *customer with the same email address is found in the system.
 *
 ** REVISION HISTORY
  *
