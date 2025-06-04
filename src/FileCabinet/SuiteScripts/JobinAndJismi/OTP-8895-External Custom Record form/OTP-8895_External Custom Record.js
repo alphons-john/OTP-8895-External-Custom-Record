@@ -7,7 +7,7 @@
 *
 *
 *
-${OTP-8895}:{Monthly Over Due Reminder for Customer}
+${OTP-8895}:{External Custom Record form and actions}
 *
 *
 **************************************************************************************************
