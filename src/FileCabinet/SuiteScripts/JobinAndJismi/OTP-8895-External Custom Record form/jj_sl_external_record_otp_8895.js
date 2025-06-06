@@ -16,7 +16,9 @@ ${OTP-8895}:{External Custom Record form and actions}
 *
 *Date Created:30-may-2025
 *
-*Description:This script is designed to generate records for a custom record type in NetSuite, incorporating fields such as Customer Name, Email, *Customer Reference, Subject, and Message. The Customer Reference field automatically links to the corresponding customer record when an existing *customer with the same email address is found in the system.
+*Description:This script is designed to generate records for a custom record type in NetSuite, incorporating fields such as Customer Name, Email,
+*Customer Reference, Subject, and Message. The Customer Reference field automatically links to the corresponding customer record when an existing
+*customer with the same email address is found in the system.
 *
 ** REVISION HISTORY
  *
