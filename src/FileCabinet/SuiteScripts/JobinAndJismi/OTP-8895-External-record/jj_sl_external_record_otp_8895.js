@@ -76,13 +76,13 @@ define(['N/record', 'N/ui/serverWidget', 'N/search', 'N/url', 'N/email'],
                 id: 'custpage_name',
                 type: serverWidget.FieldType.TEXT,
                 label: 'Customer Name'
-            });
+            }).isMandatory = true;
 
             form.addField({
                 id: 'custpage_email',
                 type: serverWidget.FieldType.TEXT,
                 label: 'Customer Email'
-            });
+            }).isMandatory = true;
 
             form.addField({
                 id: 'custpage_subject',
@@ -108,7 +108,7 @@ define(['N/record', 'N/ui/serverWidget', 'N/search', 'N/url', 'N/email'],
         const findCustomerByEmail = (email) => {
             let custId = null;
             let custEmail = null;
-            let salesEmail = null;
+            let salesEmail = '';
 
             search.create({
                 type: "customer",
@@ -116,14 +116,13 @@ define(['N/record', 'N/ui/serverWidget', 'N/search', 'N/url', 'N/email'],
                 columns: [
                     search.createColumn({ name: "email", label: "Email" }),
                     search.createColumn({ name: "internalid", label: "Internal ID" }),
-                    search.createColumn({ name: "email", join: "salesRep", label: "Email" })
+                    search.createColumn({ name: "email", join: "salesRep", label: "Email" }),
+                    search.createColumn({name: "email", join: "salesRep", label: "Email"})
                 ]
             }).run().each((result) => {
                 custEmail = result.getValue('email');
                 custId = result.getValue('internalid');
-                salesEmail = result.getValue({ name: "email", join: "salesRep" });
-
-                log.error("Sales Rep Email:", salesEmail);
+                salesEmail = result.getValue({ name: "email", join: "salesRep" });                
             });
 
             return { custId, custEmail, salesEmail };
@@ -144,15 +143,11 @@ define(['N/record', 'N/ui/serverWidget', 'N/search', 'N/url', 'N/email'],
             ExternalRecord.setValue({ fieldId: "custrecord_jj_customer_email", value: customerData.email });
             ExternalRecord.setValue({ fieldId: "custrecord_jj_subject", value: customerData.subject });
             ExternalRecord.setValue({ fieldId: "custrecord_jj_message", value: customerData.message });
+            let custRefer = ExternalRecord.getValue({ fieldId: "custrecord_jj_customer"});
 
             if (customerId) {
-                const ExternalUrl = url.resolveRecord({
-                    recordType: 'customer',
-                    recordId: customerId,
-                    isEditMode: true
-                });
 
-                ExternalRecord.setValue({ fieldId: "custrecord_jj_customer", value: ExternalUrl });
+                ExternalRecord.setValue({ fieldId: "custrecord_jj_customer", value: customerId });
             }
 
             return ExternalRecord.save({ ignoreMandatory: true });
@@ -163,22 +158,47 @@ define(['N/record', 'N/ui/serverWidget', 'N/search', 'N/url', 'N/email'],
          * @param {string} salesEmail - Sales representative email.
          */
         const sendNotificationEmails = (salesEmail) => {
-            const senderId = -5;
+
+        let senderName = '';
+
+        search.create({
+            type: "employee",
+            filters: [["internalid", "is", "-5"]],
+            columns: [search.createColumn({ name: "entityid", label: "Name" })]
+        }).run().each((result) => {
+            senderName = result.getValue("entityid");
+            return false; 
+        });
 
             if (salesEmail) {
                 email.send({
-                    author: senderId,
-                    recipients: salesEmail,
-                    subject: 'Record Creation',
-                    body: 'Custom record created'
-                });
+                author: -5,
+                recipients: salesEmail,
+                subject: 'Record Creation',
+                body: `Dear ${salesEmail},
+
+            I hope this email finds you well.
+
+            I wanted to inform you that a custom record has been successfully created. Please review the details at your earliest convenience and let me know if you need any further information.
+
+            Best regards,  
+            ${senderName}`
+            });
+
             }
 
             email.send({
-                author: senderId,
+                author: -5,
                 recipients: -5,
                 subject: 'Record Creation',
-                body: 'Custom record created'
+                body: `Dear ${senderName},
+
+            I hope this email finds you well.
+
+            I wanted to inform you that a custom record has been successfully created. Please review the details at your earliest convenience and let me know if you need any further information.
+
+            Best regards,  
+            ${senderName}`
             });
         };
 
